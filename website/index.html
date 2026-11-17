@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>osu!stable for macOS — Native Apple Silicon Platform</title>
+  <meta name="description" content="Independent native macOS compatibility runtime for the classic rhythm game experience on Apple Silicon. Zero Wine, native SDL3 & 64-bit audio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07080d;
+      --card-bg: rgba(16, 18, 28, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.16);
+      --osu-pink: #ff66ab;
+      --osu-pink-glow: rgba(255, 102, 171, 0.35);
+      --osu-purple: #9d4edd;
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --code-bg: rgba(11, 13, 22, 0.9);
+      --code-border: rgba(255, 255, 255, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient background glows */
+    .glow-1 {
+      position: absolute;
+      width: 750px;
+      height: 750px;
+      top: -200px;
+      left: 30%;
+      background: radial-gradient(circle, rgba(255, 102, 171, 0.22) 0%, rgba(157, 78, 221, 0.14) 35%, transparent 70%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      animation: pulse 9s ease-in-out infinite alternate;
+    }
+
+    .glow-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      right: 0%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(0.96); }
+      100% { opacity: 1; transform: scale(1.06); }
+    }
+
+    /* Layout wrapper */
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      width: 100vw;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: clamp(12px, 2.2vh, 24px) clamp(16px, 3vw, 36px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 44px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .osu-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff66ab, #e0287d);
+      box-shadow: 0 0 20px var(--osu-pink-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      color: var(--text-muted);
+    }
+
+    /* Lang switcher */
+    .lang-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      padding: 3px;
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Main Grid (Two Columns: Marketing Story & Technology Showcase) */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: clamp(20px, 3.5vw, 48px);
+      align-items: center;
+      padding: clamp(6px, 1.2vh, 16px) 0;
+    }
+
+    /* Left Column */
+    .hero-col {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .badge-sub {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 13px;
+      border-radius: 100px;
+      background: rgba(255, 102, 171, 0.1);
+      border: 1px solid rgba(255, 102, 171, 0.28);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #ffa4cd;
+      width: fit-content;
+      margin-bottom: clamp(10px, 1.8vh, 16px);
+      box-shadow: 0 4px 16px rgba(255, 102, 171, 0.15);
+    }
+
+    .badge-sub svg {
+      width: 13px;
+      height: 13px;
+      fill: currentColor;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4.2vh, 46px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -1px;
+      margin-bottom: clamp(10px, 1.6vh, 16px);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 25%, #ff8ec2 65%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .story-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 3px solid var(--osu-pink);
+      border-radius: 0 12px 12px 0;
+      padding: clamp(10px, 1.6vh, 14px) 16px;
+      margin-bottom: clamp(16px, 2.4vh, 22px);
+    }
+
+    .offline-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(234, 179, 8, 0.12);
+      border: 1px solid rgba(234, 179, 8, 0.32);
+      color: #fde047;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: clamp(8px, 1.4vh, 12px);
+      width: fit-content;
+      box-shadow: 0 2px 10px rgba(234, 179, 8, 0.1);
+    }
+
+    .offline-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #eab308;
+      box-shadow: 0 0 8px #eab308;
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .story-text {
+      font-size: clamp(12.5px, 1.6vh, 14.5px);
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    .story-highlight {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Actions & Gatekeeper */
+    .cta-container {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 1.6vh, 14px);
+      max-width: 460px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: clamp(12px, 1.7vh, 15px) 22px;
+      background: linear-gradient(135deg, #ff66ab, #e0287d);
+      color: #fff;
+      font-weight: 700;
+      font-size: clamp(14px, 1.7vh, 16px);
+      text-decoration: none;
+      border-radius: 13px;
+      box-shadow: 0 8px 26px var(--osu-pink-glow), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+
+    .btn-download:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 34px rgba(255, 102, 171, 0.55);
+    }
+
+    .btn-download:active {
+      transform: scale(0.98);
+    }
+
+    .btn-download svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Gatekeeper Helper Section */
+    .gatekeeper-wrapper {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .gatekeeper-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #facc15;
+      margin-bottom: 6px;
+    }
+
+    .gatekeeper-header svg {
+      width: 13px;
+      height: 13px;
+      fill: currentColor;
+    }
+
+    .gatekeeper-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(10px, 1.3vh, 11.5px);
+      color: #e2e8f0;
+    }
+
+    .gatekeeper-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .prompt-sym {
+      color: var(--osu-pink);
+      font-weight: 700;
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .btn-copy.copied {
+      background: var(--emerald);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Right Column: High-tech Engineering Cards */
+    .tech-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.4vh, 12px);
+    }
+
+    .tech-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--cyan);
+      margin-bottom: 2px;
+    }
+
+    .tech-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: clamp(10px, 1.6vh, 14px) clamp(12px, 1.5vw, 16px);
+      backdrop-filter: blur(20px);
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .tech-card:hover {
+      transform: translateX(4px);
+      border-color: var(--card-hover);
+      background: rgba(24, 28, 44, 0.88);
+    }
+
+    .tech-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .tech-card-title {
+      font-size: clamp(12.5px, 1.6vh, 14px);
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tech-badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+    }
+
+    .tech-card-desc {
+      font-size: clamp(11px, 1.4vh, 12.5px);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    .disclaimer {
+      font-size: clamp(9.5px, 1.2vh, 11px);
+      line-height: 1.4;
+      color: var(--text-dim);
+      max-width: 860px;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+      .app-wrapper {
+        height: auto;
+        min-height: 100vh;
+      }
+      html, body {
+        overflow: auto;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header>
+      <a href="#" class="brand">
+        <div class="osu-badge">!</div>
+        <div class="brand-title">
+          <span>osu!stable</span>
+          <span style="color: var(--osu-pink);">macOS</span>
+          <span class="tag-pill" id="tag-unofficial">NATIVE PLATFORM</span>
+        </div>
+      </a>
+
+      <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" id="btn-ua" onclick="setLang('ua')">УКР</button>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main>
+      <!-- Left Column: Story, Premise & Download -->
+      <div class="hero-col">
+        <div class="badge-sub">
+          <svg viewBox="0 0 170 170">
+            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.69-7.83-11.96-14.34-6.42-9.78-11.39-20.93-14.9-33.44-3.51-12.51-5.27-24.11-5.27-34.79 0-14.46 3.65-26.44 10.96-35.95 7.31-9.51 16.37-14.37 27.18-14.59 4.7 0 10.02 1.3 15.96 3.91 5.94 2.61 9.53 3.96 10.77 4.07 1.83-.22 5.65-1.63 11.45-4.24 5.8-2.61 11.05-3.83 15.75-3.69 11.96.65 21.6 5.09 28.91 13.31-10.43 6.31-15.53 15.01-15.31 26.1.22 8.7 3.48 16.09 9.78 22.17 6.3 6.08 13.8 9.56 22.5 10.43-2.17 6.53-4.89 13.16-8.15 19.89zM119.22 31.84c0-7.18 2.61-13.91 7.83-20.19 5.22-6.28 11.64-10.16 19.24-11.65.22 1.09.33 2.18.33 3.26 0 7.18-2.72 14.13-8.15 20.87-5.43 6.74-12.06 10.65-19.89 11.74-.22-1.31-.33-2.62-.33-3.92z"/>
+          </svg>
+          <span id="badge-text">Apple Silicon Native (ARM64) • .NET 10 • Zero Wine</span>
+        </div>
+
+        <h1 id="hero-title">
+          The Classic Rhythm Experience.<br><span class="gradient-text">Engineered Natively for Apple Silicon.</span>
+        </h1>
+
+        <!-- The Premise / Marketing Story -->
+        <div class="story-box">
+          <p class="story-text" id="story-text">
+            For years, enjoying classic rhythm gaming on macOS required compromise: sluggish 32-bit compatibility layers, input drift, and audio desync. This project redefines that reality. Built as an <span class="story-highlight">independent high-performance macOS runtime</span> under .NET 10, it bridges the iconic classic gameplay with modern Apple Silicon hardware. Powered by a custom platform architecture, native Metal/SDL3 rendering, and direct 64-bit audio, it delivers the pure, uncompromised desktop experience your Mac deserves.
+          </p>
+        </div>
+
+        <!-- Download & Fix -->
+        <div class="cta-container">
+          <div class="offline-pill">
+            <span class="offline-dot"></span>
+            <span id="offline-text">Offline Mode Only • Local beatmaps & gameplay • No Bancho connection</span>
+          </div>
+
+          <button class="btn-download" id="btn-download" onclick="triggerDownload()">
+            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+            <span id="dl-text">Download for macOS (.dmg)</span>
+          </button>
+
+          <!-- Gatekeeper Explanatory Box -->
+          <div class="gatekeeper-wrapper">
+            <div class="gatekeeper-header">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              <span id="gk-title">First run: If macOS blocks opening ("App damaged"), run in Terminal:</span>
+            </div>
+            <div class="gatekeeper-box">
+              <div class="gatekeeper-text">
+                <span class="prompt-sym">$</span>
+                <span>xattr -cr /Applications/osu!stable.app</span>
+              </div>
+              <button class="btn-copy" id="copy-btn" onclick="copyCommand()">
+                <span id="copy-label">Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: High-tech Engineering Cards -->
+      <div class="tech-col">
+        <div class="tech-header">
+          <span>⚡</span>
+          <span id="tech-header-text">Architecture & Platform Highlights</span>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-card-title">
+              <span>🛠️</span>
+              <span id="c1-title">Custom UI Platform Runtime</span>
+            </div>
+            <span class="tech-badge">C# / .NET 10</span>
+          </div>
+          <div class="tech-card-desc" id="c1-desc">
+            Ground-up macOS desktop integration providing smooth, native window management, persistent configuration, and classic theme support without legacy Windows dependencies.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-card-title">
+              <span>🖥️</span>
+              <span id="c2-title">Metal & SDL3 Graphics Pipeline</span>
+            </div>
+            <span class="tech-badge">SDL3 / Metal</span>
+          </div>
+          <div class="tech-card-desc" id="c2-desc">
+            Ultra-responsive modern rendering engine tailored for ProMotion and Retina displays. Uncapped frame rates, zero tearing, and precise sub-pixel clarity.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-card-title">
+              <span>🔊</span>
+              <span id="c3-title">Direct 64-bit Audio Synchronization</span>
+            </div>
+            <span class="tech-badge">libbass ARM64</span>
+          </div>
+          <div class="tech-card-desc" id="c3-desc">
+            Hardware-accelerated Apple Silicon sound pipeline delivering sub-millisecond audio clock accuracy and pristine sample reproduction. Zero translation jitter.
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-card-title">
+              <span>🔤</span>
+              <span id="c4-title">Embedded Typography Engine</span>
+            </div>
+            <span class="tech-badge">Pango / Cairo</span>
+          </div>
+          <div class="tech-card-desc" id="c4-desc">
+            Self-contained vector font rasterization engine rendering crisp, authentic interface typography out of the box — zero external tools or setup required.
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p class="disclaimer" id="disclaimer-text">
+        <strong>Disclaimer:</strong> This is an independent, non-commercial community compatibility project. All game trademarks, branding, and assets belong to their respective copyright holders. This project is not affiliated with, endorsed by, or approved by ppy Pty Ltd.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        tagUnofficial: "NATIVE PLATFORM",
+        badge: "Apple Silicon Native (ARM64) • .NET 10 • Zero Wine",
+        title: "The Classic Rhythm Experience.<br><span class='gradient-text'>Engineered Natively for Apple Silicon.</span>",
+        story: "For years, enjoying classic rhythm gaming on macOS required compromise: sluggish 32-bit compatibility layers, input drift, and audio desync. This project redefines that reality. Built as an <span class='story-highlight'>independent high-performance macOS runtime</span> under .NET 10, it bridges the iconic classic gameplay with modern Apple Silicon hardware. Powered by a custom platform architecture, native Metal/SDL3 rendering, and direct 64-bit audio, it delivers the pure, uncompromised desktop experience your Mac deserves.",
+        offlineText: "Offline Mode Only • Local beatmaps & gameplay • No Bancho connection",
+        dlText: "Download for macOS (.dmg)",
+        gkTitle: "First run: In the DMG open \"Activate & Launch\", or run in Terminal:",
+        copyLabel: "Copy",
+        copiedLabel: "Copied!",
+        techHeader: "Architecture & Platform Highlights",
+        c1Title: "Custom UI Platform Runtime",
+        c1Desc: "Ground-up macOS desktop integration providing smooth, native window management, persistent configuration, and classic theme support without legacy Windows dependencies.",
+        c2Title: "Metal & SDL3 Graphics Pipeline",
+        c2Desc: "Ultra-responsive modern rendering engine tailored for ProMotion and Retina displays. Uncapped frame rates, zero tearing, and precise sub-pixel clarity.",
+        c3Title: "Direct 64-bit Audio Synchronization",
+        c3Desc: "Hardware-accelerated Apple Silicon sound pipeline delivering sub-millisecond audio clock accuracy and pristine sample reproduction. Zero translation jitter.",
+        c4Title: "Embedded Typography Engine",
+        c4Desc: "Self-contained vector font rasterization engine rendering crisp, authentic interface typography out of the box — zero external tools or setup required.",
+        disclaimer: "<strong>Disclaimer:</strong> This is an independent, non-commercial community compatibility project. All game trademarks, branding, and assets belong to their respective copyright holders. This project is not affiliated with, endorsed by, or approved by ppy Pty Ltd."
+      },
+      ua: {
+        tagUnofficial: "НАТИВНА ПЛАТФОРМА",
+        badge: "Нативно для Apple Silicon (ARM64) • .NET 10 • Без Wine",
+        title: "Класичний ритм-геймінг.<br><span class='gradient-text'>Створений нативно для Apple Silicon.</span>",
+        story: "Роками запуск класичної ритм-гри на macOS вимагав компромісів: неповоротких 32-бітних емуляторів, затримок вводу та розсинхрону звуку. Цей проєкт змінює правила гри. Створене як <span class='story-highlight'>незалежне високопродуктивне середовище для macOS</span> на базі .NET 10, воно об'єднує культовий геймплей із сучасними чіпами Apple Silicon. Завдяки власній платформовій архітектурі, нативному рендерингу Metal/SDL3 та прямому 64-бітному аудіо, ви отримуєте чистий, безкомпромісний відгук, на який заслуговує ваш Mac.",
+        offlineText: "Лише оффлайн-режим • Локальні карти та геймплей • Без підключення до Bancho",
+        dlText: "Завантажити для macOS (.dmg)",
+        gkTitle: "Перший запуск: У DMG відкрийте «Activate & Launch», або виконайте в Терміналі:",
+        copyLabel: "Копіювати",
+        copiedLabel: "Скопійовано!",
+        techHeader: "Архітектура та ключові особливості",
+        c1Title: "Власний UI Platform Runtime",
+        c1Desc: "Створена з нуля системна інтеграція для macOS, що забезпечує плавне керування вікнами, збереження конфігурації та підтримку класичних тем без старих залежностей Windows.",
+        c2Title: "Графічний пайплайн Metal та SDL3",
+        c2Desc: "Надвисокошвидкісний рендеринг, оптимізований під дисплеї ProMotion та Retina. Необмежена частота кадрів, відсутність розривів та бездоганна чіткість.",
+        c3Title: "Пряма 64-бітна аудіосинхронізація",
+        c3Desc: "Апаратно прискорений аудіотракт для чіпів Apple Silicon із субмілісекундною точністю годинника та кришталевим звуком. Жодних затримок трансляції.",
+        c4Title: "Вбудований рушій типографіки",
+        c4Desc: "Автономний рушій векторної растеризації, що рендерить чіткі автентичні шрифти інтерфейсу «з коробки» — без встановлення додаткових пакетів чи утиліт.",
+        disclaimer: "<strong>Застереження:</strong> Це незалежний некомерційний проєкт сумісності від спільноти. Усі торгові марки, брендинг та ассети гри належать їхнім правовласникам. Цей проєкт не пов'язаний, не схвалений та не підтримується ppy Pty Ltd."
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+      document.getElementById('tag-unofficial').innerText = t.tagUnofficial;
+      document.getElementById('badge-text').innerText = t.badge;
+      document.getElementById('hero-title').innerHTML = t.title;
+      document.getElementById('story-text').innerHTML = t.story;
+      document.getElementById('offline-text').innerText = t.offlineText;
+      document.getElementById('dl-text').innerText = t.dlText;
+      document.getElementById('gk-title').innerText = t.gkTitle;
+      document.getElementById('copy-label').innerText = t.copyLabel;
+      document.getElementById('tech-header-text').innerText = t.techHeader;
+      document.getElementById('c1-title').innerText = t.c1Title;
+      document.getElementById('c1-desc').innerText = t.c1Desc;
+      document.getElementById('c2-title').innerText = t.c2Title;
+      document.getElementById('c2-desc').innerText = t.c2Desc;
+      document.getElementById('c3-title').innerText = t.c3Title;
+      document.getElementById('c3-desc').innerText = t.c3Desc;
+      document.getElementById('c4-title').innerText = t.c4Title;
+      document.getElementById('c4-desc').innerText = t.c4Desc;
+      document.getElementById('disclaimer-text').innerHTML = t.disclaimer;
+
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-ua').classList.toggle('active', lang === 'ua');
+      localStorage.setItem('osu_mac_lang', lang);
+    }
+
+    function copyCommand() {
+      const cmd = "xattr -cr /Applications/osu!stable.app";
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const label = document.getElementById('copy-label');
+        btn.classList.add('copied');
+        label.innerText = translations[currentLang].copiedLabel;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          label.innerText = translations[currentLang].copyLabel;
+        }, 2000);
+      });
+    }
+
+    function triggerDownload() {
+      window.location.href = "https://github.com/osustabmac/unofficial_osustable_mac/releases/download/v1.0.0/osu.stable-macOS-arm64.dmg";
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('osu_mac_lang');
+      if (saved) {
+        setLang(saved);
+      } else if (navigator.language && navigator.language.startsWith('uk')) {
+        setLang('ua');
+      }
+    });
+  </script>
+</body>
+</html>
