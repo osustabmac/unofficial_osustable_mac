@@ -5,6 +5,7 @@
 [![Runtime](https://img.shields.io/badge/.NET-10.0%20ARM64-purple.svg?style=flat-square)](https://dotnet.microsoft.com/)
 [![Graphics](https://img.shields.io/badge/Render-Metal%20%2F%20SDL3-blue.svg?style=flat-square)](https://libsdl.org/)
 [![Status](https://img.shields.io/badge/Status-Offline%20Playable-orange.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.0--beta-yellow.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
 [![Benchmark](https://img.shields.io/badge/Benchmark-0.50--0.60%20ms%20(MacBook%20Air%20M2)-success.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
 [![Website](https://img.shields.io/badge/Landing-osustabmac.pages.dev-ff66aa.svg?style=flat-square)](https://osustabmac.pages.dev)
 
@@ -14,8 +15,9 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 
 ---
 
-> ### ⚠️ Current Status: UNOFFICIAL PORT • OFFLINE MODE ONLY
-> This **unofficial community compatibility port** currently operates strictly in **offline mode**.
+> ### ⚠️ Current Status: PUBLIC BETA • OFFLINE PLAYABLE
+> This project is currently in **active Public Beta**. While local beatmaps, skins, and core rhythm gameplay are fully playable with sub-millisecond audio sync, **it is an early compatibility build and you may encounter minor bugs, visual quirks, or edge cases**.
+> - 🧪 **Beta Feedback**: Found a bug or glitch? Feel free to report it on [GitHub Issues](https://github.com/osustabmac/unofficial_osustable_mac/issues)!
 > - ✅ Full local gameplay, beatmap importing, and skin loading.
 > - ✅ Precise local hit evaluation, audio sync, and offline replays.
 > - ❌ **No connection to official online services (Bancho) at the moment**. Online rankings, multiplayer lobbies, and account logins are currently disabled / not connected.
