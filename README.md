@@ -16,7 +16,7 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 > This native compatibility port currently operates **strictly in offline mode**.
 > - ✅ Full local gameplay, beatmap importing, and skin loading.
 > - ✅ Precise local hit evaluation, audio sync, and offline replays.
-> - ❌ **No connection to official online services (Bancho)**. Online rankings, multiplayer lobbies, and account logins are intentionally disabled / not implemented.
+> - ❌ **No connection to official online services (Bancho) at the moment**. Online rankings, multiplayer lobbies, and account logins are currently disabled / not connected.
 
 ---
 
