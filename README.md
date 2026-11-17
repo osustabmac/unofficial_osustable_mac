@@ -20,6 +20,19 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 
 ---
 
+## 📸 In-Game Screenshots
+
+<p align="center">
+  <a href="docs/screenshots/screenshot-menu.jpg"><img src="docs/screenshots/screenshot-menu.jpg" width="32%" alt="Main Menu" /></a>
+  <a href="docs/screenshots/screenshot-songselect.jpg"><img src="docs/screenshots/screenshot-songselect.jpg" width="32%" alt="Song Selection" /></a>
+  <a href="docs/screenshots/screenshot-gameplay.jpg"><img src="docs/screenshots/screenshot-gameplay.jpg" width="32%" alt="Gameplay (0.64ms Mania)" /></a>
+</p>
+<p align="center">
+  <em>Native Apple Silicon rendering with crisp Retina typography and sub-millisecond latency (click to expand)</em>
+</p>
+
+---
+
 ## ⚡ Key Highlights & Architecture
 
 * **Zero Emulation Overhead**: Runs native ARM64 instructions directly on Apple Silicon cores.
