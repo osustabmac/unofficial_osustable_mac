@@ -59,8 +59,6 @@ This repository provides the clean-room compatibility layers and platform bridge
 | **[`src/OsuStable.Core`](src/OsuStable.Core/)** | Clean-room engine core: high-performance `.osu` beatmap parser, timing point math, hitobject mechanics, and scoring algorithms. |
 | **[`src/OsuStable.Native`](src/OsuStable.Native/)** | Hardware-accelerated audio engine (BASS ARM64), platform input capture, and render loop orchestration. |
 | **[`tests/OsuStable.Core.Tests`](tests/OsuStable.Core.Tests/)** | Automated unit tests covering parser accuracy, slider curve math, and timing evaluation. |
-| **[`tools`](tools/)** | Build scripts, dependency fetchers (SDL3, BASS, libgdiplus dylibs), and app bundle packaging toolchain. |
-| **[`website`](website/)** | Source code of the official bilingual landing page deployed on Cloudflare Pages ([osustabmac.pages.dev](https://osustabmac.pages.dev)). |
 
 ---
 
