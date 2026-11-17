@@ -7,7 +7,6 @@
 [![Status](https://img.shields.io/badge/Status-Offline%20Playable-orange.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
 [![Release](https://img.shields.io/badge/Release-v1.0.0--beta-yellow.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
 [![Benchmark](https://img.shields.io/badge/Benchmark-0.50--0.60%20ms%20(MacBook%20Air%20M2)-success.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
-[![Website](https://img.shields.io/badge/Landing-osustabmac.pages.dev-ff66aa.svg?style=flat-square)](https://osustabmac.pages.dev)
 
 An **unofficial**, independent community port and native compatibility runtime for the classic rhythm game client, engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
 
