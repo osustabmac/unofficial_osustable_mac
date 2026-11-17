@@ -1,5 +1,6 @@
-# osu!stable for macOS (Apple Silicon Native)
+# Unofficial osu!stable for macOS (Apple Silicon Native)
 
+[![Project](https://img.shields.io/badge/Project-Unofficial%20Community%20Port-blueviolet.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon%20ARM64)-brightgreen.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
 [![Runtime](https://img.shields.io/badge/.NET-10.0%20ARM64-purple.svg?style=flat-square)](https://dotnet.microsoft.com/)
 [![Graphics](https://img.shields.io/badge/Render-Metal%20%2F%20SDL3-blue.svg?style=flat-square)](https://libsdl.org/)
@@ -7,14 +8,14 @@
 [![Benchmark](https://img.shields.io/badge/Benchmark-0.50--0.60%20ms%20(MacBook%20Air%20M2)-success.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
 [![Website](https://img.shields.io/badge/Landing-osustabmac.pages.dev-ff66aa.svg?style=flat-square)](https://osustabmac.pages.dev)
 
-A native, high-performance compatibility runtime and port for the classic rhythm game client engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
+An **unofficial**, independent community port and native compatibility runtime for the classic rhythm game client, engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
 
 Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, running as a pure 64-bit ARM64 application on modern **.NET 10**.
 
 ---
 
-> ### ⚠️ Current Status: OFFLINE MODE ONLY
-> This native compatibility port currently operates **strictly in offline mode**.
+> ### ⚠️ Current Status: UNOFFICIAL PORT • OFFLINE MODE ONLY
+> This **unofficial community compatibility port** currently operates strictly in **offline mode**.
 > - ✅ Full local gameplay, beatmap importing, and skin loading.
 > - ✅ Precise local hit evaluation, audio sync, and offline replays.
 > - ❌ **No connection to official online services (Bancho) at the moment**. Online rankings, multiplayer lobbies, and account logins are currently disabled / not connected.
