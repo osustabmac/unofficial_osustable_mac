@@ -45,20 +45,23 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 
 ## 📦 Download & Installation
 
-### Option 1: Standalone DMG (Recommended)
-Download the ready-to-run package:
+Download the ready-to-run macOS Apple Silicon package:  
 👉 **[Download osu!stable-macOS-arm64.dmg (v1.0.0)](https://github.com/osustabmac/unofficial_osustable_mac/releases/download/v1.0.0/osu.stable-macOS-arm64.dmg)** (378 MB)
 
+### Installation Steps
 1. Open `osu!stable-macOS-arm64.dmg`.
 2. Drag **osu!stable.app** into your **Applications** folder.
-3. Double-click the included **Activate & Launch.command** inside the DMG to automatically authorize the app with macOS Gatekeeper.
+3. Launch **osu!stable** from Launchpad or Applications!
 
-### Option 2: Terminal Gatekeeper Fix (If prompted "App is damaged")
-Because this is an independent community build without an Apple Developer ID notarization certificate, macOS Quarantine flags downloaded binaries. You can remove quarantine with a single command:
-```bash
-xattr -cr /Applications/osu\!stable.app
-```
-Then launch **osu!stable** from Launchpad or Applications as normal!
+### 💡 First Run: macOS Gatekeeper Authorization
+Because this is an independent community build without an Apple Developer ID notarization certificate, macOS Quarantine may flag the app on first launch (*"App is damaged and can't be opened"*).
+
+You can authorize it in one of two ways:
+* **Via DMG (Easiest)**: Double-click the included **Activate & Launch.command** inside the DMG.
+* **Via Terminal**: If you already moved the app to `/Applications`, run:
+  ```bash
+  xattr -cr /Applications/osu!stable.app
+  ```
 
 ---
 
