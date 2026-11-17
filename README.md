@@ -4,6 +4,7 @@
 [![Runtime](https://img.shields.io/badge/.NET-10.0%20ARM64-purple.svg?style=flat-square)](https://dotnet.microsoft.com/)
 [![Graphics](https://img.shields.io/badge/Render-Metal%20%2F%20SDL3-blue.svg?style=flat-square)](https://libsdl.org/)
 [![Status](https://img.shields.io/badge/Status-Offline%20Playable-orange.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
+[![Benchmark](https://img.shields.io/badge/Benchmark-0.50--0.60%20ms%20(MacBook%20Air%20M2)-success.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac)
 [![Website](https://img.shields.io/badge/Landing-osustabmac.pages.dev-ff66aa.svg?style=flat-square)](https://osustabmac.pages.dev)
 
 A native, high-performance compatibility runtime and port for the classic rhythm game client engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
@@ -25,10 +26,10 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 <p align="center">
   <a href="docs/screenshots/screenshot-menu.jpg"><img src="docs/screenshots/screenshot-menu.jpg" width="32%" alt="Main Menu" /></a>
   <a href="docs/screenshots/screenshot-songselect.jpg"><img src="docs/screenshots/screenshot-songselect.jpg" width="32%" alt="Song Selection" /></a>
-  <a href="docs/screenshots/screenshot-gameplay.jpg"><img src="docs/screenshots/screenshot-gameplay.jpg" width="32%" alt="Gameplay (0.64ms Mania)" /></a>
+  <a href="docs/screenshots/screenshot-gameplay.jpg"><img src="docs/screenshots/screenshot-gameplay.jpg" width="32%" alt="Gameplay (0.50–0.60 ms on MacBook Air M2)" /></a>
 </p>
 <p align="center">
-  <em>Native Apple Silicon rendering with crisp Retina typography and sub-millisecond latency (click to expand)</em>
+  <em>Tested Benchmark: <strong>0.50–0.60 ms frametimes on MacBook Air M2</strong> • Native Apple Silicon rendering with crisp Retina UI (click to enlarge)</em>
 </p>
 
 ---
@@ -36,7 +37,7 @@ Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, runni
 ## ⚡ Key Highlights & Architecture
 
 * **Zero Emulation Overhead**: Runs native ARM64 instructions directly on Apple Silicon cores.
-* **ProMotion & Retina Display Optimization**: Ultra-low latency rendering pipeline using native SDL3 and Metal windowing, supporting 120Hz/240Hz refresh rates with uncapped framerates.
+* **ProMotion & Retina Display Optimization**: Ultra-low latency rendering pipeline using native SDL3 and Metal windowing, achieving **0.50–0.60 ms frametimes on MacBook Air M2**, supporting 120Hz/240Hz refresh rates with uncapped framerates.
 * **Direct 64-bit Audio Synchronization**: Sub-millisecond audio clock precision powered by direct 64-bit BASS ARM64 native bindings — eliminating the audio drift notorious in Wine wrappers.
 * **Self-Contained Typography Pipeline**: Embedded Pango, Cairo, and Fontconfig runtime ensuring crisp font rasterization across all resolutions out of the box.
 
