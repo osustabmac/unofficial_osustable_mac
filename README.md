@@ -67,7 +67,10 @@ You can authorize it in one of two ways:
 
 ## 📂 Source Code Structure
 
-This repository provides the clean-room compatibility layers and platform bridges written to make classic desktop rhythm gameplay possible on macOS:
+> **💡 100% Original Author-Written Code**:  
+> Every file and line of code in this repository is **100% original, clean-room authored code** developed from scratch. It does **NOT** contain, copy, or redistribute any stolen, proprietary, or decompiled code from the original osu!stable client. It was created exclusively as an independent platform bridge and runtime compatibility layer to enable the game to run correctly, natively, and flawlessly on **macOS and Apple Silicon (ARM64)**.
+
+The repository is structured as follows:
 
 | Directory | Description |
 | :--- | :--- |
@@ -97,10 +100,10 @@ dotnet run --project src/OsuStable.Native
 
 ---
 
-## ⚖️ Legal Disclaimer
+## ⚖️ Legal Disclaimer & Clean-Room Notice
 
-This is an **independent, non-commercial open-source compatibility and educational project** developed by the community. 
+This is an **independent, non-commercial open-source compatibility and educational project**:
 
-- This repository does **NOT** contain, redistribute, or host copyrighted proprietary game assets, beatmaps, or proprietary binaries.
-- All game trademarks, branding, audio assets, and original game mechanics belong to **ppy Pty Ltd** and their respective copyright holders.
-- This project is not affiliated with, endorsed by, or approved by Dean Herbert (peppy) or ppy Pty Ltd.
+- **100% Original Code**: All code published in this repository is original, author-written software developed independently to solve platform interoperability on modern macOS ARM64 systems. Zero code was extracted, decompiled, or stolen from official proprietary repositories.
+- **No Proprietary Assets**: This repository does **NOT** contain, redistribute, or host copyrighted game assets, beatmaps, or proprietary binaries.
+- **Trademarks & Attribution**: All game trademarks, branding, audio assets, and original game design belong to **ppy Pty Ltd** and their respective copyright holders. This project is not affiliated with, endorsed by, or approved by Dean Herbert (peppy) or ppy Pty Ltd.
