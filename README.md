@@ -6,7 +6,7 @@
 [![Status](https://img.shields.io/badge/Status-Offline%20Playable-orange.svg?style=flat-square)](https://github.com/osustabmac/unofficial_osustable_mac/releases)
 [![Website](https://img.shields.io/badge/Landing-osustabmac.pages.dev-ff66aa.svg?style=flat-square)](https://osustabmac.pages.dev)
 
-A native, high-performance port of the classic rhythm game client re-engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
+A native, high-performance compatibility runtime and port for the classic rhythm game client engineered for **Apple Silicon (M1/M2/M3/M4) macOS**.
 
 Built completely free of Wine, CrossOver, or Rosetta 2 translation layers, running as a pure 64-bit ARM64 application on modern **.NET 10**.
 

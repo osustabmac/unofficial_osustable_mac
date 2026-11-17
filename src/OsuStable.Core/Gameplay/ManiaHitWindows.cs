@@ -11,8 +11,7 @@ public enum StableManiaMods
     ScoreV2 = 1 << 4
 }
 
-// Direct semantic port of stable's mania hit-window initialisation from the
-// decompiled HitObjectManagerMania implementation.
+// Standard Mania hit-window initialization based on classic timing algorithms.
 public readonly record struct ManiaHitWindows(
     int Perfect,
     int Great,

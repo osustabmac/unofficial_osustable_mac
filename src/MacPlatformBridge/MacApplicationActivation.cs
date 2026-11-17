@@ -74,7 +74,7 @@ internal static class MacApplicationActivation
     {
         var applicationClass = objc_getClass("NSApplication");
         var application = Send(applicationClass, sel_registerName("sharedApplication"));
-        // The recovered .NET entry point bypasses SDL_main. Complete AppKit's
+        // The standalone .NET host entry point runs independently of SDL_main. Complete AppKit's
         // launch lifecycle so ordered NSWindows receive a real window number
         // and are registered with WindowServer.
         Send(application, sel_registerName("finishLaunching"));
